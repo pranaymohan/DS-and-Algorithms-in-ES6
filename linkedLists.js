@@ -65,7 +65,7 @@ class LinkedList {
 // 2.1 Remove Duplicates from Linked List
   // Easy way to do this is to use a hashtable and check if value was already stored
   // TIME: O(n), SPACE: O(n)
-  function removeDuplicates(list) {
+  const removeDuplicates = (list) => {
     let current = list.head;
     let reference = { current: 1 };
     while (current.next !== null) {
@@ -78,11 +78,11 @@ class LinkedList {
       current = current.next;
     }
     return list;
-  }
+  };
 
   // If you can't use hash table, then iterate twice for each value (using 2 pointers)
   // TIME: O(N), SPACE: O(1)
-  function removeDups(list) {
+  const removeDups = (list) => {
     let current = list.head;
     // outer loop
     while (current !== null) {
@@ -98,12 +98,12 @@ class LinkedList {
       current = current.next;
     }
     return list;
-  }
+  };
 
 // 2.2 Return Kth to Last element in a singly LL
   // Use 2 pointers, current and runner -- when current hits end, runner will be k away
   // TIME: O(N), SPACE: O(1)
-  function returnKth(node, k) {
+  const returnKth = (node, k) => {
     let index = 0;
     let current = node;
     while (current !== null) {
@@ -117,13 +117,13 @@ class LinkedList {
       index++;
     }
     return runner.value;
-  }
+  };
 
 // 2.3 Delete a specified middle node in a linked list, given access to ONLY that node
 // Example: input is a node "C" that is in a LL: A -> B -> C -> D
 // Output should return nothing, but list should be A -> B -> D
   // The trick is to copy over the data from the next node, and then delete it... savage
-  function removeMiddleNode(node) {
+  const removeMiddleNode = (node) => {
     if (!node.next) {
       // bad input
       return false;
@@ -131,4 +131,4 @@ class LinkedList {
     node.value = node.next.value;
     node.next = node.next.next;
     return true;
-  }
+  };
