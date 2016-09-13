@@ -2,6 +2,16 @@
 
 // String and Array Problems in ES6
 
+// BASIC: reverse a string
+  // swap until midpoint
+  const reverseString = (string) => {
+    let array = string.split('');
+    for (let i = array.length - 1; i >= Math.floor(array.length / 2); i--) {
+      [ array[i], array[array.length - i - 1] ] = [ array[array.length - i - 1], array[i] ];
+    }
+    return array.join('');
+  }
+
 // 1.1 Implement an algorithm to determine if a string has all unique characters. 
   // When in doubt, hash it out
   // Time: O(N), Space: O(N)
@@ -20,9 +30,9 @@
   // What if you cannot use additional data structures?
   // Time: O(N^2), Space: O(1)* -> *not entirely sure if so, and why
   const isUniqueNoHash = (string) => {
-    for (var i = 0; i < string.length; i++) {
-      var current = char[i];
-      for (var j = i + 1; j < string.length; j++) {
+    for (let i = 0; i < string.length; i++) {
+      let current = char[i];
+      for (let j = i + 1; j < string.length; j++) {
         if (string[j] === current) {
           return false;
         }
@@ -38,7 +48,7 @@
   // We'll assume that we're checking if b is a permutation of a
   // Naive way is to build a hashtable of a, and if b has any values that aren't in a, then return false
   const checkSubset = (a, b) => {
-    var ref = {};
+    let ref = {};
     a.forEach((char) => {
       ref[char] = ref[char] || 0;
       ref[char]++;
