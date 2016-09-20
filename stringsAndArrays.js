@@ -132,3 +132,177 @@ limited to just dictionary words. */
     // index wasn't returned inside of loop, therefore not found!
     return -1;
   }
+
+
+/* 1.5 One Away: given two strings, write a function to check if they are
+one or zero edits away.
+
+Eg.
+
+pale, ple -> true
+pales, pale -> true
+pale, bale -> true
+pale, bake -> false
+
+*/
+
+// We know if the length is the same, we have to have a replace
+// Otherwise if shorter, delete, and longer, addition
+const checkReplace = (a, b) => {
+  let skips = 0;
+  for (let i = 0; i < a.length; i++) {
+    if (skips > 1) {
+      return false;
+    }
+    if (a[i] !== b[i]) {
+      skips++;
+    }
+  }
+  return true;
+}
+
+const checkInsertRemove = (longer, shorter) => {
+  let skips = 0;
+  let l = 0;
+  let s = 0;
+  while (s < shorter.length) {
+    if (skips > 1) {
+      return false;
+    }
+    if (longer[l] !== shorter[s]) {
+      skips++;
+      // adjust the longer pointer to skip
+      l++;
+    }
+    s++;
+    l++;
+  }
+  return true;
+}
+
+const oneAway = (string1, string2) => {
+  if (string1.length === string2.length) {
+    // check replace
+    return checkReplace(string1, string2);
+  } else if (string1.length - 1 === string2.length) {
+    // check insert with string1 as longer
+    return checkInsertRemove(string1, string2);
+  } else if (string2.length - 1 === string1.length) {
+    // check insert with string2 as longer
+    return checkInsertRemove(string2, string1);
+  } else {
+    return false;
+  }
+}
+
+console.log(oneAway('pale', 'ple')); // => true
+console.log(oneAway('pale', 'pales')); // => true
+console.log(oneAway('pale', 'bale')); // => true
+console.log(oneAway('pale', 'bake')); // => false
+
+/*
+1.6 Implement a method to perform basic string compression using 
+the counts of repeated characters. For example, the string aabcccccaaa 
+would become a2blc5a3. If the "compressed" string would not become smaller 
+than the original string, your method should return the original string.
+*/
+
+const stringCompression = (string) => {
+  let current = string[0];
+  let count = 1;
+  let flag = false;
+  let result = [];
+  for (let i = 1; i < string.length; i++) {
+    // check the char
+    if (string[i] !== current) {
+      // add the previous one to the array, reset count
+      result.push(current + '' + count);
+      current = string[i];
+      count = 1;
+    } else {
+      // switch flag
+      if (flag === false) flag = true;
+      //continue the chain
+      count++;
+    }
+  }
+  // one more push
+  result.push(current + '' + count);
+  // check flag
+  if (flag === true) {
+    return result.join('');
+  } else {
+    return string;
+  }
+}
+
+console.log(stringCompression('pale')); // => 'pale'
+console.log(stringCompression('aabcccccaaa')); // => 'a2blc5a3'
+
+/*
+1.8 Zero Matrix: Write an algorithm such that if an element in an MxN
+matrix is 0, its entire row and column are set to 0
+*/
+
+// use a column and row tracker
+const zeroMatrix = (matrix) => {
+  // check for null array
+  if (matrix.length === 0) {
+    return matrix;
+  }
+  let rows = Array(matrix.length).fill(1);
+  let columns = Array(matrix[0].length).fill(1);
+  // iterate through matrix and set the benchmark arrays to 0
+  for (let r = 0; r < matrix.length; r++) {
+    for (let c = 0; c < matrix[0].length; c++) {
+      if (matrix[r][c] === 0) {
+        rows[r] = 0;
+        columns[c] = 0;
+      }
+    }
+  }
+  // iterate through matrix again and set the values to 0;
+  for (let r = 0; r < matrix.length; r++) {
+    for (let c = 0; c < matrix[0].length; c++) {
+      if (rows[r] === 0 || columns[c] === 0) {
+        matrix[r][c] = 0;
+      }
+    }
+  }
+  return matrix;
+}
+
+m = [[1, 0, 1, 1, 0],
+     [0, 1, 1, 1, 0],
+     [1, 1, 1, 1, 1],
+     [1, 0, 1, 1, 1],
+     [1, 1, 1, 1, 1]];
+
+console.log(zeroMatrix(m));
+
+/*
+OUTPUT => [[0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0],
+           [0, 0, 1, 1, 0],
+           [0, 0, 0, 0, 0],
+           [0, 0, 1, 1, 0]];
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

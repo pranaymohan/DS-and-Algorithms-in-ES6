@@ -134,3 +134,11 @@ All words contain only lowercase alphabetic characters.
 SOLUTION: https://dannywang0911.wordpress.com/2015/05/19/word-ladder/
 
 */
+
+/*
+
+Given a XML file, translate the XML file into a tree
+
+*/
+
+
