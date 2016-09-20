@@ -62,6 +62,26 @@ class LinkedList {
   }
 }
 
+// BASIC: reverse a linked list
+  // Create a new list and copy over
+  const reverseList = (rootNode) => {
+    let current = rootNode;
+    let previous = null;
+
+    while (current) {
+      // save the pointer to next
+      let temp = current.next;
+      // move the next pointer to the previous
+      current.next = previous;
+      // move the previous pointer to current
+      previous = current;
+      // move current to the inital next position
+      current = temp;
+    }
+    return previous;
+
+  }
+
 // 2.1 Remove Duplicates from Linked List
   // Easy way to do this is to use a hashtable and check if value was already stored
   // TIME: O(n), SPACE: O(n)

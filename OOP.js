@@ -15,7 +15,7 @@
     }
   }
 
-  class BlackJack extends CardGame {
+  class BlackJackGame extends CardGame {
     constructor(player) {
       super();
       this.player = player;

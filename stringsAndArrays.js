@@ -96,3 +96,39 @@ limited to just dictionary words. */
     return true;
   };
 
+
+// How can you match substring of a sting?
+  // Examples:
+  // > subStringFinder('abbcdabbbbbck', 'ab')
+  //   = 0
+  // > subStringFinder('abbcdabbbbbck', 'bck')
+  //   = 9
+  // doesn't work for this one.
+  // > subStringFinder('abbcdabbbbbck', 'bbbck')  
+  //   = -1
+
+  // Run 2 pointers, if the pointers for the substring reach the end, then return index
+  const substringFinder = (string, substring) => {
+    let i, j, resultIndex;
+    for (i = 0, j = 0; i < string.length; i++) {
+      // check if values are equal on substring vs string
+      if (string[i] === substring[j]) {
+        // increment substring to keep up with string
+        j++;
+      } else {
+        // didn't work, reset substring index
+        j = 0;
+      }
+
+      // check if j is 0, if so, reset index at i
+      if (j === 0) {
+        // have to add 1 because its an inclusive index
+        resultIndex = i + 1;
+      } else if (j === substring.length) {
+        // else, we hit a match! return index
+        return resultIndex;
+      }
+    }
+    // index wasn't returned inside of loop, therefore not found!
+    return -1;
+  }
