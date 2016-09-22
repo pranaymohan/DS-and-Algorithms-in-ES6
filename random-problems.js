@@ -26,6 +26,26 @@ const pairSums = (array, sum) => {
   return false;
 }
 
+// EXTRA CREDIT: find 3 numbers in an array that add to a sum
+
+/*
+
+Randomly shuffle an array
+
+*/
+
+// Fisher-yates shuffle:
+const shuffleArray = (array) => {
+  let lastIndex = array.length - 1;
+  while (lastIndex > 0) {
+    let randomIndex = Math.floor(Math.random * length);
+    [ array[randomIndex], array[lastIndex] ] = [ array[lastIndex], array[randomIndex] ];
+    lastindex--;
+  }
+  return array;
+}
+
+
 /*
 
 WORD LADDER 1
@@ -135,10 +155,165 @@ SOLUTION: https://dannywang0911.wordpress.com/2015/05/19/word-ladder/
 
 */
 
+// Inputs: beginWord (String), endWord (string), dictionary (array of strings)
+// Outputs: shortestTransformations (Array of array of strings)
+// Edge cases/ concerns:
+//  - all words same length
+//  - lowercase alphabetical chars
+//  - only change one letter at a time, all words have to exist in the dictionary
+
+const wordLadder2 = (beginWord, endWord, dictionary) => {
+  // initialize final results array
+  let results = [];
+  let shortestNumber = Number.MAX_VALUE;
+  let alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  let length = beginWord.length;
+  // check bad conditions -- if so, return blank array
+  if (!dictionary || !beginWord || !endWord || length !== endWord.length) {
+    return results;
+  }
+  // add endWord to dictionary
+  dictionary.push(endWord);
+  // inner recursive function that continues as long as a while loop is running
+  const irf = (currentWord, dictionary, path, count) => {
+    // if current path doesn't exist, then initialize it
+    // otherwise copy it so it doesn't mutate the original value;
+    // same with count 
+    if (path) {
+      path = path.slice();
+    } else {
+      path = [];
+    }
+    count = count || 0;
+    // update the path and count now that we've recursed
+    path.push(currentWord);
+    count++;
+    // if current word is the end word, then append current path to the results array
+    // however, we need to check whether it is the shortest one
+    if (currentWord === endWord && count <= shortestNumber) {
+      if (count < shortestNumber) {
+        // update the count
+        shortestNumber = count;
+        results = [];
+      }
+      // add the path to the results array
+      results.push(path);
+      // return here to avoid any further searching
+      return;
+    }
+    // do the breadth first search
+    for (let i = 0; i < length; i++) {
+      // iterate through all chars in english lowercase alphabet
+      alphabet.forEach(char => {
+        // create test word by slicing string up and inputing new char
+        let testWord = currentWord.slice(0, i) + char + currentWord.slice(i + 1, length);
+        // check if testWord exists in dictionary
+        let index = dictionary.indexOf(testWord);
+        if (index > -1) {
+          // remove from dictionary to prevent circular traversal of this word
+          // only if not endword (because we want to encounter it again!)
+          let newDictionary = dictionary.slice(0, index) + dictionary.slice(index + 1, dictionary.length);
+          // recurse with test word!
+          irf(testWord, newDictionary, path, count);
+        }
+      });
+    }
+    // empty return statement, as we are mutating a closure variable
+    return;
+  }
+  // invoke first irf
+  irf(beginWord, dictionary);
+  // return all shortest transformations
+  return results;
+}
+
+console.log(wordLadder2('hit', 'cog', ["hot","dot","dog","lot","log"]));
+
 /*
 
 Given a XML file, translate the XML file into a tree
 
 */
+
+// assume the file is called input.xml
+// gonna write jQuery
+  // Don't think this is right...
+  // TODO: Review this solution
+
+class Tree {
+  constructor(element) {
+    this.element = element;
+    this.children = [];
+  }
+  addChild(child) {
+    // adds child to this.children
+    if (!child || !(child instanceof Tree)){
+      child = new Tree(child);
+    }
+    this.children.push(child);
+    return child;
+  }
+}
+
+<script type="text/javascript">
+
+$.get('input.xml', null, function(data) {
+  var $root = $(data).find('') // need to input root element
+  var tree = new Tree($root); // assume we have a tree builder which takes in the element
+  function makeTree($node, tree) {
+    $node.childNodes.forEach(childNode => {
+      child = tree.addChild(new Tree(childNode));
+      makeTree(childNode, child);
+    });
+    return;
+  }
+  return tree;
+});
+
+</script>
+
+/*
+
+Given a Pattern and a dictionary, print out all the strings  that match 
+the pattern. where a character in the pattern is mapped uniquely to a 
+character in the dictionary.
+
+e.g 1. ("abc" , <"cdf", "too", "hgfdt" ,"paa">) -> output = "cdf" 
+e.g 2. ("acc" , <"cdf", "too", "hgfdt" ,"paa">) -> output = "too", "paa" 
+
+*/
+
+// One option is to check unicode differences between each character
+  // but that doesn't work if "paa" = "too" = "acc"
+const encodePattern = (pattern) => {
+  let encoder = {};
+  let unique = 0;
+  let result = '';
+  for (let i = 0; i < pattern.length; i++) {
+    // check if char is in hashmap
+    if (!encoder[pattern[i]]) {
+      encoder[pattern[i]] = unique;
+      unique++;
+    } else {
+      result += encoder[pattern[i]];
+    }
+  }
+  return result;
+}
+
+const patternMap = (pattern, dict) => {
+  results = [];
+  const encodedPattern = encodePattern(pattern);
+  dict.forEach(word => {
+    if (word.length === pattern.length && encodedPattern === encodePattern(word)) {
+      results.push(word);
+    }
+  });
+  return results;
+}
+
+console.log(patternMap("abc", ["cdf", "too", "hgfdt" ,"paa"])); // ['cdf']
+console.log(patternMap("acc", ["cdf", "too", "hgfdt" ,"paa"])); // ['too', 'paa']
+
 
 
